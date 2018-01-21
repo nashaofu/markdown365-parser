@@ -64,7 +64,7 @@ export default {
   top 0
   right 0
   bottom 0
-  padding 6px 10px
+  padding 7px 12px
   overflow auto
   img
     max-width 100%
@@ -73,10 +73,9 @@ export default {
    pre
     background #272822
     border-radius 3px
+    overflow-x auto
     code
       display block
-      overflow-x auto
       background #272822
       color #ddd
-      border-radius 3px
 </style>
