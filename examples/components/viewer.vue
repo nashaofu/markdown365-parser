@@ -4,9 +4,8 @@
 
 <script>
 import hljs from 'highlight.js'
-import Markdown365Parser, * as Parser from '../../src'
-console.dir(Markdown365Parser)
-console.log(Parser)
+import Markdown365Parser from '../../src'
+
 export default {
   name: 'viewer',
   props: {

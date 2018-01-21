@@ -5,6 +5,7 @@
 
 <script>
 import codemirror from 'codemirror'
+import debounce from 'lodash/debounce'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/display/placeholder'
@@ -18,32 +19,52 @@ export default {
       default: ''
     }
   },
+  data () {
+    return {
+      editor: null
+    }
+  },
   mounted () {
-    this.editor = codemirror(this.$refs.editor, {
-      value: this.value,
-      mode: 'text/x-markdown',
-      theme: 'xq-light',
-      indentUnit: 2,
-      smartIndent: true,
-      tabSize: 4,
-      indentWithTabs: true,
-      keyMap: 'sublime',
-      lineWrapping: true,
-      scrollbarStyle: 'overlay',
-      inputStyle: 'contenteditable',
-      showCursorWhenSelecting: true,
-      placeholder: '输入markdown',
-      lineWiseCopyCut: true,
-      autofocus: true,
-      resetSelectionOnContextMenu: true
-    })
-    this.editor.on('change', () => {
-      this.$emit('input', this.editor.getValue())
-    })
+    this.init()
+    this.setValue()
   },
   watch: {
     value () {
-      this.editor.setValue(this.value)
+      this.setValue()
+    }
+  },
+  methods: {
+    init () {
+      this.editor = codemirror(this.$refs.editor, {
+        mode: 'text/x-markdown',
+        theme: 'xq-light',
+        indentUnit: 2,
+        smartIndent: true,
+        tabSize: 4,
+        indentWithTabs: true,
+        keyMap: 'sublime',
+        lineWrapping: true,
+        scrollbarStyle: 'overlay',
+        inputStyle: 'contenteditable',
+        showCursorWhenSelecting: true,
+        placeholder: '输入markdown',
+        lineWiseCopyCut: true,
+        autofocus: true,
+        resetSelectionOnContextMenu: true
+      })
+      this.editor.on('change', this.change)
+    },
+    change: debounce(function () {
+      const value = this.editor.getValue()
+      if (this.value !== value) {
+        this.$emit('input', value)
+      }
+    }, 700),
+    setValue () {
+      const value = this.editor.getValue()
+      if (value !== this.value) {
+        this.editor.setValue(this.value)
+      }
     }
   }
 }
