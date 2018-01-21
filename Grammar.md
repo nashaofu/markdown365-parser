@@ -52,13 +52,13 @@ header 2
 
 * 行内式
 
-![markdown365](/static/markdown365.png)
+![markdown365](./static/markdown365.png)
 
 * 参考式
 
 ![markdown365][1].
 
-[1]: /static/markdown365.png
+[1]: ./static/markdown365.png
 
 ## 无序列表
 
