@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "node"
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install
+
+script:
+  - npm run build
+
+before_deploy:
+  - cd dist
+
+deploy:
+  provider: npm
+  email: $email
+  api_key: $authToken
+  on:
+    tags: true
