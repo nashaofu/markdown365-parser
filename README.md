@@ -1,7 +1,7 @@
 # markdown365-parser
 A markdown parser library base vnode
 
-> 基于vnode的markdown解析器。markdown语法解析由[marked](https://github.com/chjj/marked)扩展而来，示例地址[Github Pages](https://markdown365.github.io/markdown365-parser/)
+基于vnode的markdown解析器。markdown语法解析由[marked](https://github.com/chjj/marked)扩展而来，示例地址[Github Pages](https://markdown365.github.io/markdown365-parser/)
 
 ## Install
 
