@@ -58,7 +58,7 @@ header 2
 
 ![markdown365][1].
 
-[1]: ./static/markdown365.png
+[1]: https://markdown365.github.io/markdown365-parser/static/markdown365.png
 
 ## 无序列表
 
@@ -137,4 +137,10 @@ I am ***bold and italic***
 <http://example.com/>
 
 <address@example.com>
+
+## html
+
+<h5>我是h5标签</h5>
+
+<img src="./static/markdown365.png" width="120px" title="markdown365" />
 

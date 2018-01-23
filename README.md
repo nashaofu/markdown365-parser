@@ -9,29 +9,6 @@ A markdown parser library base vnode
 
 ## Usage
 
-### ESM
-```js
-import Markdown365Parser from 'markdown365-parser'
-const markdwon = '## markdown365-parser'
-const $el = document.querySelector('#prevview')
-
-const parser = new Markdown365Parser({
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  sanitizer: null,
-  smartLists: false,
-  smartypants: false,
-  base: '',
-  $el: $el
-})
-
-// 解析并渲染到真实dom中去
-parser.parse(markdown)
-```
-
 ### Browser
 ```html
 <!doctype html>
@@ -55,7 +32,6 @@ parser.parse(markdown)
       smartLists = false,
       smartypants = false,
       base = '',
-      $el = null
       $el: document.querySelector('#previiew')
     })
     parser.parse(markdown)
