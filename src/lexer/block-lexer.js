@@ -6,6 +6,7 @@ import { isDef } from '../utils'
  * Block Lexer
  */
 export default class BlockLexer {
+  static vision = process.env.VERSION
   static rules = block
   /**
    * Static Lex Method

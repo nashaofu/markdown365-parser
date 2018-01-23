@@ -6,6 +6,7 @@ import h from '../vnode'
  * Inline Lexer & Compiler
  */
 export default class InlineLexer {
+  static vision = process.env.VERSION
   static rules = inline
   /**
    * Static Lexing/Compiling Method

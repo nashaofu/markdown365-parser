@@ -1,6 +1,7 @@
 import BlockLexer from './block-lexer'
 import InlineLexer from './inline-lexer'
 export default class Lexer {
+  static vision = process.env.VERSION
   static BlockLexer = BlockLexer
   static InlineLexer = InlineLexer
   /**

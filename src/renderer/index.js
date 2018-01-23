@@ -4,6 +4,7 @@ import {
 } from '../utils.js'
 
 export default class Renderer {
+  static vision = process.env.VERSION
   static render (vnode, oldVnode) {
     const renderer = new Renderer()
     return renderer.patch(vnode, oldVnode)
