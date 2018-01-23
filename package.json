@@ -1,6 +1,6 @@
 {
   "name": "markdown365-parser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A markdown parser library base vnode",
   "author": "nashaofu <diaocheng@outlook.com>",
   "main": "dist/markdown365-parser.js",
