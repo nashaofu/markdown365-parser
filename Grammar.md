@@ -91,12 +91,12 @@ header 2
 ## 引用块
 
 > quote 1
-```js
-console.log('code block in quote')
-```
 >> quote 2
 * ol list 1
 * ol list 2
+```js
+console.log('code block in quote')
+```
 
 ## 代码块
 
