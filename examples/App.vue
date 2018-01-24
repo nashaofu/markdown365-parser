@@ -1,9 +1,24 @@
 <template lang="pug">
 #app
-  editor(v-model="value")
-  viewer(:value="value")
+  editor(
+    v-model="value",
+    :show="showEditor"
+  )
+  marked(
+     :value="value",
+    :show="showMarked"
+  )
+  viewer(
+    :value="value",
+    :full="full"
+  )
   github
-  navbar
+  navbar(
+    :showEditor="showEditor",
+    :showMarked="showMarked",
+    @toggleEditor="toggleEditor",
+    @toggleMarked="toggleMarked"
+  )
 </template>
 
 <script>
@@ -12,6 +27,7 @@ import Editor from './components/editor'
 import Viewer from './components/viewer'
 import Github from './components/github'
 import Navbar from './components/navbar'
+import Marked from './components/marked'
 
 export default {
   name: 'App',
@@ -19,11 +35,33 @@ export default {
     Editor,
     Viewer,
     Github,
-    Navbar
+    Navbar,
+    Marked
   },
   data () {
     return {
-      value: grammar
+      value: grammar,
+      showEditor: true,
+      showMarked: false
+    }
+  },
+  computed: {
+    full () {
+      return !this.showEditor && !this.showMarked
+    }
+  },
+  methods: {
+    toggleEditor (val) {
+      this.showEditor = val
+      if (val) {
+        this.showMarked = false
+      }
+    },
+    toggleMarked (val) {
+      this.showMarked = val
+      if (val) {
+        this.showEditor = false
+      }
     }
   }
 }
@@ -35,6 +73,10 @@ export default {
 
 *
   box-sizing border-box
+
+html
+body
+  font-family "Source Sans Pro", "Helvetica Neue", Arial, sans-serif
 
 ::-webkit-scrollbar
   width 6px

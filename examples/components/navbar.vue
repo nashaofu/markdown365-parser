@@ -1,33 +1,20 @@
 <template lang="pug">
 .nav-bar
-  button.nav-bar-button(
-    type="button"
-    @click="click"
-  )
-    i.fa(:class="getClass")
   ul.nav-bar-list
     li
       button.nav-bar-list-button(
-        type="button"
-        title="编辑"
-      )
-        i.fa.fa-pencil
-    li
-      button.nav-bar-list-button(
-        type="button"
-        title="预览"
-      )
-        i.fa.fa-eye
-    li
-      button.nav-bar-list-button(
-        type="button"
-        title="对比"
+        :class="showMarked && 'nav-bar-list-button-active'",
+        type="button",
+        title="对比",
+        @click="retweet"
       )
         i.fa.fa-retweet
     li
       button.nav-bar-list-button(
-        type="button"
-        title="源码模式"
+        :class="showEditor && 'nav-bar-list-button-active'",
+        type="button",
+        title="源码",
+        @click="toggleEditor"
       )
         i.fa.fa-code
 </template>
@@ -35,19 +22,22 @@
 <script>
 export default {
   name: 'nav-bar',
-  data () {
-    return {
-      open: false
-    }
-  },
-  computed: {
-    getClass () {
-      return this.open ? 'fa-times' : 'fa-cog'
+  props: {
+    showEditor: {
+      type: Boolean,
+      default: true
+    },
+    showMarked: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-    click () {
-      this.open = !this.open
+    retweet () {
+      this.$emit('toggleMarked', !this.showMarked)
+    },
+    toggleEditor () {
+      this.$emit('toggleEditor', !this.showEditor)
     }
   }
 }
@@ -70,7 +60,7 @@ button()
   margin 0
   color #fff
   cursor pointer
-  background-color #ff4081
+  background-color #00bcd4
   &:hover&:after
   &:active&:after
     content: ""
@@ -90,12 +80,7 @@ button()
   z-index 500
   right 30px
   bottom 30px
-  &-button
-    button()
-
   &-list
-    position absolute
-    bottom 100%
     padding 0
     margin 0
     list-style none
@@ -103,4 +88,6 @@ button()
       margin 15px auto
     &-button
       button()
+      &-active
+        background-color #ff4081
 </style>

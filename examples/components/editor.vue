@@ -1,6 +1,11 @@
 <template lang="pug">
 .editor
-  .editor-container(ref="editor")
+  .editor-title 编辑器
+  transition(name="fade")
+    .editor-container(
+      v-show="show",
+      ref="editor"
+    )
 </template>
 
 <script>
@@ -17,6 +22,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -81,16 +90,36 @@ export default {
   top 0
   bottom 0
   left 0
-  &-container
+  border-right 1px solid #eee
+  &-title
     position absolute
     top 0
+    right 0
+    left 0
+    font-size 20px
+    text-align center
+    height 42px
+    line-height 42px
+    font-weight 600
+    background-color #fff
+    border-bottom 1px solid #eee
+    box-shadow 0 2px 5px #eee
+  &-container
+    position absolute
+    top 42px
     right 0
     bottom 0
     left 0
     font-size 18px
-    padding 7px 12px
     .CodeMirror
       width 100%
       height 100%
+      padding 7px 12px
       background-color #f8f8f8
+
+.fade-enter-active
+.fade-leave-active
+  transition: opacity 0.3s ease-in-out
+.fade-enter, .fade-leave-to
+  opacity: 0
 </style>

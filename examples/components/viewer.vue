@@ -1,5 +1,7 @@
 <template lang="pug">
-.viewer.markdown-body
+.viewer(:class="full && 'viewer-full'")
+  .viewer-title Markdown365-parser渲染效果
+  .viewer-container.markdown-body(ref="view")
 </template>
 
 <script>
@@ -12,6 +14,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    full: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -30,7 +36,7 @@ export default {
       smartLists: false,
       smartypants: false,
       base: '',
-      $el: this.$el
+      $el: this.$refs.view
     })
     this.render()
   },
@@ -45,7 +51,7 @@ export default {
         return
       }
       this.parser.parse(this.value)
-      this.$el
+      this.$refs.view
         .querySelectorAll('pre code')
         .forEach(item => hljs.highlightBlock(item))
     }
@@ -63,13 +69,38 @@ export default {
   top 0
   right 0
   bottom 0
-  padding 7px 12px
-  overflow auto
+  z-index 100
+  background-color #fff
+  transition width 0.3s ease-in-out
+  border-left 1px solid #eee
+  &-full
+    width 100%
+  &-title
+    position absolute
+    top 0
+    right 0
+    left 0
+    font-size 20px
+    text-align center
+    height 42px
+    line-height 42px
+    font-weight 600
+    background-color #fff
+    border-bottom 1px solid #eee
+    box-shadow 0 2px 5px #eee
+  &-container
+    position absolute
+    top 42px
+    right 0
+    bottom 0
+    left 0
+    padding 12px
+    overflow auto
   img
     max-width 100%
     &[alt="markdown365"]
       max-width 120px
-   pre
+  .markdown-body pre
     background #272822
     border-radius 3px
     overflow-x auto
