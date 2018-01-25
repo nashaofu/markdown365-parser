@@ -30,4 +30,5 @@ src
 
 ### Markdwon解析流程介绍
 
-![解析流程](http://upload-images.jianshu.io/upload_images/6492782-2451d1218d335070.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![解析流程](http://upload-images.jianshu.io/upload_images/6492782-3914a6059d452f9d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
