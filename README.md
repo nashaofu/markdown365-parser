@@ -61,6 +61,12 @@ A markdown parser library base vnode
 
 * **smartypants**: Use "smart" typographic punctuation for things like quotes and dashes. Default: false
 
+## Screenshots
+
+1. 编辑模式下![editor.png](./screenshots/editor.png)
+2. 与marked对比![compare.png](./screenshots/compare.png)
+
+
 ## Licences
 
 [MIT](./LICENSE)
