@@ -1,10 +1,8 @@
-import Lexer from './lexer'
+import Lexer, { BlockLexer, InlineLexer } from './lexer'
 import Renderer from './renderer'
 import h from './vnode'
 
 export default class Parser {
-  static Lexer = Lexer
-  static Renderer = Renderer
   static vision = process.env.VERSION
   /**
    * Static Parser Method
@@ -13,6 +11,11 @@ export default class Parser {
     const parser = new Parser(options)
     return parser.parse(src)
   }
+
+  /**
+   * 初始化Parser类
+   * @param {Object} options
+   */
   constructor ({
     gfm = true,
     tables = true,
@@ -37,29 +40,55 @@ export default class Parser {
       base,
       $el
     }
+    // 初始化Lexer
     this.lexer = new Lexer(this.options)
+    // 初始化Renderer
     this.renderer = new Renderer(this.options)
-    this.vnode = {}
-  }
-
-  parse (src) {
-    const $el = this.options.$el
-    const vnode = h({
+    // 初始化vnode
+    this.vnode = h({
       $el: $el,
       tag: $el.tagName.toLowerCase(),
+      type: 'node',
+      children: []
+    })
+  }
+
+  /**
+   * 解析源码并渲染到dom
+   * @param {String} src
+   * @return {Parser} this
+   */
+  parse (src) {
+    /**
+     * 必须创建新的vnode
+     * 创建的vnode将和this.vnode进行对比
+     * 否则render diff的时候就会失败
+     */
+    const vnode = h({
+      $el: this.vnode.$el,
+      tag: this.vnode.tag,
       type: 'node',
       children: this.lex(src)
     })
 
     this.render(vnode)
     this.vnode = vnode
-    return this.vnode
+    return this
   }
 
+  /**
+   * 把源码解析为vnode
+   * @param {String} src
+   * @return {Vnode}
+   */
   lex (src) {
     return this.lexer.lex(src)
   }
 
+  /**
+   * 把Vnode渲染到dom
+   * @param {Vnode} vnode
+   */
   render (vnode) {
     try {
       this.renderer.patch(vnode, this.vnode)
@@ -76,5 +105,7 @@ export default class Parser {
 export {
   Parser,
   Lexer,
+  BlockLexer,
+  InlineLexer,
   Renderer
 }

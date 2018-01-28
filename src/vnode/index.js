@@ -20,6 +20,7 @@ export default ({
     text,
     source
   })
+  // 每个子节点都把parent指向当前节点vnode
   vnode.children.forEach(item => {
     item.parent = vnode
   })

@@ -15,6 +15,12 @@ export default class InlineLexer {
     let inlineLexer = new InlineLexer(options, links)
     return inlineLexer.parser(vnode)
   }
+
+  /**
+   * 初始化类
+   * @param {Object} options
+   * @param {Object} links
+   */
   constructor ({
     gfm = true,
     breaks = false,
@@ -46,6 +52,10 @@ export default class InlineLexer {
     this.setLinks(links)
   }
 
+  /**
+   * 设置参考式的链接对象集合
+   * @param {Object} links
+   */
   setLinks (links) {
     if (typeof links !== 'object') {
       throw new TypeError('`links` isn\'t a object.')
@@ -53,12 +63,18 @@ export default class InlineLexer {
     this.links = links
   }
 
+  /**
+   * 解析行内内容
+   * @param {Vnode} vnode
+   */
   parser (vnode) {
     return this.lex(vnode.source, vnode.parent)
   }
 
   /**
    * Lexing/Compiling
+   * @param {String} src
+   * @param {Vnode} parent
    */
   lex (src, parent = null) {
     let vnodes = []
@@ -285,8 +301,12 @@ export default class InlineLexer {
     }
     return vnodes
   }
+
   /**
-   * Compile Link
+   * 生成链接或图片vnode对象
+   * @param {String} cap 链接中子节点源码
+   * @param {Object} link 链接对象
+   * @returns {Vnode}
    */
   lexLink (cap, link) {
     let href = link.href
@@ -295,6 +315,8 @@ export default class InlineLexer {
     if (isDef(title)) {
       attributes['title'] = title
     }
+
+    // 判断是否为图片
     if (cap[0].charAt(0) !== '!') {
       if (isDef(href)) {
         attributes['href'] = transformURL(this.options.base, href)
@@ -321,6 +343,8 @@ export default class InlineLexer {
 
   /**
    * Smartypants Transformations
+   * @param {String} text
+   * @return {String}
    */
   smartypants (text) {
     if (!this.options.smartypants) {

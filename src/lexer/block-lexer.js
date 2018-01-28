@@ -16,6 +16,10 @@ export default class BlockLexer {
     return blockLexer.parser(src)
   }
 
+  /**
+   * 初始化类
+   * @param {Object} options
+   */
   constructor ({
     gfm = true,
     tables = true,
@@ -34,8 +38,12 @@ export default class BlockLexer {
       smartLists,
       base
     }
+
+    // 初始化解析规则
     this.rules = block.normal
+    // 初始化参考式的链接或图片存储的对象
     this.links = {}
+    // 初始化vnode
     this.vnode = []
 
     if (this.options.gfm) {
@@ -47,7 +55,9 @@ export default class BlockLexer {
     }
   }
   /**
-   * Preprocessing
+   * 解析源码
+   * @param {String} src
+   * @return {Object} vnode links
    */
   parser (src) {
     src = src
@@ -64,7 +74,11 @@ export default class BlockLexer {
   }
 
   /**
-   * Lexing
+   * 解析源码
+   * @param {String} src
+   * @param {Boolean} top 是否是顶级的标签
+   * @param {Boolean} bq 是否为blockquote便签中的元素
+   * @return {Vnode}
    */
   lex (src, top, bq) {
     src = src.replace(/^ +$/gm, '')
@@ -369,6 +383,13 @@ export default class BlockLexer {
     return vnodes
   }
 
+  /**
+   * 解析table
+   * @param {Array} thead 表头每一列
+   * @param {Array} tbody 表格每一行
+   * @param {Array} align 表格每一列对齐方式
+   * @return {Vnode}
+   */
   lexTable (thead, tbody, align) {
     return h({
       tag: 'table',

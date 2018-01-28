@@ -39,6 +39,7 @@ export default {
       $el: this.$refs.view
     })
     this.render()
+    console.log(this.parser)
   },
   watch: {
     value () {
@@ -98,8 +99,10 @@ export default {
     overflow auto
   img
     max-width 100%
+    display block
+    margin 0 auto
     &[alt="markdown365"]
-      max-width 120px
+      max-width 200px
   .markdown-body pre
     background #272822
     border-radius 3px

@@ -5,46 +5,21 @@ import {
 
 export default class Renderer {
   static vision = process.env.VERSION
+
+  /**
+   * Static render Method
+   */
   static render (vnode, oldVnode) {
     const renderer = new Renderer()
     return renderer.patch(vnode, oldVnode)
   }
 
-  getNamespace (key) {
-    return {
-      svg: 'http://www.w3.org/2000/svg',
-      xhtml: 'http://www.w3.org/1999/xhtml',
-      xlink: 'http://www.w3.org/1999/xlink',
-      xml: 'http://www.w3.org/XML/1998/namespace',
-      xmlns: 'http://www.w3.org/2000/xmlns/',
-      math: 'http://www.w3.org/1998/Math/MathML'
-    }[key.toLowerCase()]
-  }
-
-  isHTML (tag) {
-    return (
-      'html,body,base,head,link,meta,style,title,' +
-      'address,article,aside,footer,header,h1,h2,h3,h4,h5,h6,hgroup,nav,section,' +
-      'div,dd,dl,dt,figcaption,figure,picture,hr,img,li,main,ol,p,pre,ul,' +
-      'a,b,abbr,bdi,bdo,br,cite,code,data,dfn,em,i,kbd,mark,q,rp,rt,rtc,ruby,' +
-      's,samp,small,span,strong,sub,sup,time,u,var,wbr,area,audio,map,track,video,' +
-      'embed,object,param,source,canvas,script,noscript,del,ins,' +
-      'caption,col,colgroup,table,thead,tbody,td,th,tr,' +
-      'button,datalist,fieldset,form,input,label,legend,meter,optgroup,option,' +
-      'output,progress,select,textarea,' +
-      'details,dialog,menu,menuitem,summary,' +
-      'content,element,shadow,template,blockquote,iframe,tfoot'
-    ).split(',').indexOf(tag.toLowerCase()) !== -1
-  }
-
-  isSVG (tag) {
-    return (
-      'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
-      'foreignObject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
-      'polygon,polyline,rect,switch,symbol,text,textpath,tspan,use,view'
-    ).split(',').indexOf(tag.toLowerCase()) !== -1
-  }
-
+  /**
+   * 比较新旧两个节点
+   * 并更新到dom
+   * @param {Vnode} vnode
+   * @param {Vnode} oldVnode
+   */
   patch (vnode, oldVnode) {
     if (isUndef(vnode)) {
       this.removeEl(oldVnode)
@@ -90,7 +65,11 @@ export default class Renderer {
     }
   }
 
-  // 对比属性
+  /**
+   * 对比新旧节点属性
+   * @param {Vnode} vnode
+   * @param {Vnode} oldVnode
+   */
   patchAttributes (vnode, oldVnode) {
     // 合并属性
     const attributes = {
@@ -109,7 +88,11 @@ export default class Renderer {
     })
   }
 
-  // 对比子节点
+  /**
+   * 对比子新旧节点的子节点列表
+   * @param {Array} newCh
+   * @param {Array} oldCh
+   */
   patchChildren (newCh = [], oldCh = []) {
     let oldStartIdx = 0
     let newStartIdx = 0
@@ -169,7 +152,12 @@ export default class Renderer {
     }
   }
 
-  // 创建元素
+  /**
+   * 创建新dom元素
+   * 并赋值给vnode.$el
+   * @param {Vnode} vnode
+   * @return {Vnode}
+   */
   create (vnode) {
     if (vnode.type === 'node') {
       if (!vnode.$el) {
@@ -193,11 +181,21 @@ export default class Renderer {
     return vnode
   }
 
-  // 追加节点
+  /**
+   * 追加节点
+   * @param {Vnode} parent
+   * @param {Vnode} vnode
+   */
   append (parent, vnode) {
     parent.$el.appendChild(vnode.$el)
   }
 
+  /**
+   * 在指定节点前插入节点
+   * @param {Vnode} parent
+   * @param {Vnode} vnode
+   * @param {Vnode} before
+   */
   insert (parent, vnode, before) {
     if (before && before.$el) {
       parent.$el.insertBefore(vnode.$el, before.$el)
@@ -206,7 +204,10 @@ export default class Renderer {
     }
   }
 
-  // 移除节点
+  /**
+   * 移除节点
+   * @param {Vnode} vnode
+   */
   removeEl (vnode) {
     // 移除的只可能是旧的节点
     // 所以不用在其父节点中移除节点
@@ -215,7 +216,12 @@ export default class Renderer {
     }
   }
 
-  // 替换节点
+  /**
+   * 替换旧节点为新的节点
+   * @param {Vnode} parent
+   * @param {Vnode} vnode
+   * @param {Vnode} oldVnode
+   */
   replace (parent, vnode, oldVnode) {
     if (isDef(parent)) {
       if (oldVnode &&

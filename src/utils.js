@@ -17,13 +17,9 @@ export const replace = function replace (regex, opt) {
 export const noop = () => { }
 noop.exec = noop
 
-export const isUndef = val => {
-  return val === undefined || val === null
-}
+export const isUndef = val => val === undefined || val === null
 
-export const isDef = val => {
-  return val !== undefined && val !== null
-}
+export const isDef = val => val !== undefined && val !== null
 
 export const transformURL = (base, url) => {
   if (url.indexOf('/') &&
