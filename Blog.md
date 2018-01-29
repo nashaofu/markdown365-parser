@@ -722,7 +722,7 @@ src
   ![diff原理](http://upload-images.jianshu.io/upload_images/6492782-68c4f8249fa93e16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
   2. 子节点列表diff，子节点相对于单个节点的对比就复杂很多了，会存在列表中添加节点、删除节点、节点位置移动、某一个节点被替换这几种基本情况。这里先放上`patchChildren`方法的源码。
   ```js
-    /**
+  /**
    * 对比子新旧节点的子节点列表
    * @param {Array} newCh
    * @param {Array} oldCh
