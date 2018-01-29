@@ -720,4 +720,75 @@ src
 
   1. 单个节点进行比较
   ![diff原理](http://upload-images.jianshu.io/upload_images/6492782-68c4f8249fa93e16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  2. 子节点列表diff，子节点相对于单个节点的对比就复杂很多了，会存在列表中添加节点、删除节点、节点位置移动这几种基本情况。
+  2. 子节点列表diff，子节点相对于单个节点的对比就复杂很多了，会存在列表中添加节点、删除节点、节点位置移动、某一个节点被替换这几种基本情况。这里先放上`patchChildren`方法的源码。
+  ```js
+    /**
+   * 对比子新旧节点的子节点列表
+   * @param {Array} newCh
+   * @param {Array} oldCh
+   */
+  patchChildren (newCh = [], oldCh = []) {
+    let oldStartIdx = 0 // 记录旧节点数组中的开始下标
+    let newStartIdx = 0 // 记录新节点数组中的开始下标
+    let oldEndIdx = oldCh.length - 1 // 记录旧节点冲末尾向前匹配的位置下标
+    let oldStartVnode = oldCh[0]
+    let oldEndVnode = oldCh[oldEndIdx]
+    let newEndIdx = newCh.length - 1
+    let newStartVnode = newCh[0]
+    let newEndVnode = newCh[newEndIdx]
+
+    // 循环节点列表，直到新列表和旧列表的每一个一个节点都被比较完
+    while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+      if (oldStartVnode.tag === newStartVnode.tag) {
+        this.patch(newStartVnode, oldStartVnode)
+        oldStartVnode = oldCh[++oldStartIdx]
+        newStartVnode = newCh[++newStartIdx]
+      } else if (oldEndVnode.tag === newEndVnode.tag) {
+        this.patch(newEndVnode, oldEndVnode)
+        oldEndVnode = oldCh[--oldEndIdx]
+        newEndVnode = newCh[--newEndIdx]
+      } else if (oldStartVnode.tag === newEndVnode.tag) { // Vnode moved right
+        this.patch(newEndVnode, oldStartVnode)
+        /**
+         * 把旧节点真实dom移动到newEndVnode的位置
+         * 假定oldStartIdx和newStaetIdx，oldEndIdx和newEndIdx都相同的情况下进行分析
+         * 按照如下方法就可以得到最新的按照newCh排列的真实dom结构
+         */
+        this.insert(oldEndVnode.parent, oldStartVnode, oldCh[oldEndIdx + 1])
+        oldStartVnode = oldCh[++oldStartIdx]
+        newEndVnode = newCh[--newEndIdx]
+      } else if (oldEndVnode.tag === newStartVnode.tag) { // Vnode moved left
+        this.patch(newStartVnode, oldEndVnode)
+        // 把旧节点真实dom移动到newEndVnode的位置
+        this.insert(oldStartVnode.parent, oldEndVnode, oldStartVnode)
+        oldEndVnode = oldCh[--oldEndIdx]
+        newStartVnode = newCh[++newStartIdx]
+      } else {
+        // 这种情况就是一个节点变成了另一个节点的情况
+        this.replace(newStartVnode.parent, this.create(newStartVnode), oldStartVnode)
+        oldStartVnode = oldCh[++oldStartIdx]
+        newStartVnode = newCh[++newStartIdx]
+      }
+    }
+    // 以下情况为节点增加或者减少了的情况
+    if (oldStartIdx > oldEndIdx) {
+      // 插入新节点的情况
+      for (; newStartIdx <= newEndIdx; ++newStartIdx) {
+        this.insert(newCh[newStartIdx].parent, this.create(newCh[newStartIdx]), newCh[newEndIdx + 1])
+      }
+    } else if (newStartIdx > newEndIdx) {
+      // 移除就无用的旧节点
+      for (; oldStartIdx <= oldEndIdx; ++oldStartIdx) {
+        this.removeEl(oldCh[oldStartIdx])
+      }
+    }
+  }
+  ```
+  下面分别对while循环中的每一个条件进行说明
+  1. 如果`oldStartVnode.tag === newStartVnode.tag`，那么旧认为这两个节点是匹配的，即认为为相同节点，直接对比更新这两个节点，如：在末尾追加节点这种情况或者节点子元素变化
+  ![1.png](http://upload-images.jianshu.io/upload_images/6492782-bdf39d7a02dcbfff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  2. 如果`oldEndVnode.tag === newEndVnode.tag`，那么就用新的节点去更新旧节点，如：第一个节点变为了其他类型的节点
+  ![2.png](http://upload-images.jianshu.io/upload_images/6492782-1c346f9972502813.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+  3. 如果`oldStartVnode.tag === newEndVnode.tag`，那么就对比这两个节点，并且将真实dom节点移动到newEndVnode.tag所在的位置，下图中步骤1只是把新节点更新到真实dom上去了，但是节点所在位置和新节点集合是不同的，所以还需要第二个步骤，移动h1到h3后面去，此时real dom和virtual dom才对应得上
+  ![3.png](http://upload-images.jianshu.io/upload_images/6492782-09c542ddda374b7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)

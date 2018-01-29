@@ -20,11 +20,6 @@ export default {
       default: true
     }
   },
-  data () {
-    return {
-      parser: null
-    }
-  },
   mounted () {
     this.parser = new Markdown365Parser({
       gfm: true,

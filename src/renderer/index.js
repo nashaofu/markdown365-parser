@@ -102,12 +102,9 @@ export default class Renderer {
     let newEndIdx = newCh.length - 1
     let newStartVnode = newCh[0]
     let newEndVnode = newCh[newEndIdx]
+
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
-      if (isUndef(oldStartVnode)) {
-        oldStartVnode = oldCh[++oldStartIdx] // Vnode has been moved left
-      } else if (isUndef(oldEndVnode)) {
-        oldEndVnode = oldCh[--oldEndIdx]
-      } else if (oldStartVnode.tag === newStartVnode.tag) {
+      if (oldStartVnode.tag === newStartVnode.tag) {
         this.patch(newStartVnode, oldStartVnode)
         oldStartVnode = oldCh[++oldStartIdx]
         newStartVnode = newCh[++newStartIdx]
