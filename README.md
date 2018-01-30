@@ -23,14 +23,13 @@ A markdown parser library base vnode
   <script>
     const markdwon = '## markdown365-parser'
     const parser = new Markdown365Parser({
-      gfm = true,
-      tables = true,
-      breaks = false,
-      pedantic = false,
-      sanitize = false,
-      sanitizer = null,
-      smartLists = false,
-      smartypants = false,
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      smartypants: false,
+      base: '',
+      $el: this.$refs.view
       base = '',
       $el: document.querySelector('#previiew')
     })
@@ -47,19 +46,19 @@ A markdown parser library base vnode
 
 ## Options
 
-* **gfm**: Enable GitHub flavored markdown. Default: true
+* **gfm**: GitHub flavored markdown语法支持. 默认: `true`
 
-* **tables**: Enable GFM tables. This option requires the gfm option to be true. Default: true
+* **tables**: GFM tables语法支持. 必须要求`gfm`为`true`. 默认: `true`
 
-* **breaks**: Enable GFM line breaks. This option requires the gfm option to be true. Default: false
+* **breaks**: GFM line breaks解析规则支持. 必须要求`gfm`为`true`. 默认: `false`
 
-* **pedantic**: Conform to obscure parts of markdown.pl as much as possible. Don't fix any of the original markdown bugs or poor behavior. Default: false
+* **pedantic**: 是否尽可能遵守`markdown.pl`的部分内容. 不去掉一些不严格的内容. 默认: `false`
 
-* **sanitize**: Sanitize the output. Ignore any HTML that has been input.
+* **smartypants**: 是否替换特殊符号. 默认: `false`
 
-* **smartLists**: Use smarter list behavior than the original markdown. May eventually be default with the old behavior moved into pedantic. Default: true
+* **base**：这里是用来指定markdwon文档中的链接地址、图片地址的前置链接，如markdown中的说有图片都指向另一个域的时候，base就可以设置为指定域名。这里这个参数主要时考虑到编写桌面markdown编辑器用的，因为编辑器打开markdown文件时，对应的图片的路径要转换为相对markdown文件所在目录的相对路径，具体可参考我的另一个项目[markdown365](https://github.com/markdown365/markdown365)
 
-* **smartypants**: Use "smart" typographic punctuation for things like quotes and dashes. Default: false
+* **$el**：文档要渲染到的dom节点
 
 ## Screenshots
 

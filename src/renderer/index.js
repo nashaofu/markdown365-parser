@@ -114,11 +114,6 @@ export default class Renderer {
         newEndVnode = newCh[--newEndIdx]
       } else if (oldStartVnode.tag === newEndVnode.tag) { // Vnode moved right
         this.patch(newEndVnode, oldStartVnode)
-        /**
-         * 把旧节点真实dom移动到newEndVnode的位置
-         * 假定oldStartIdx和newStaetIdx，oldEndIdx和newEndIdx都相同的情况下进行分析
-         * 按照如下方法就可以得到最新的按照newCh排列的真实dom结构
-         */
         this.insert(oldEndVnode.parent, oldStartVnode, oldCh[oldEndIdx + 1])
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]

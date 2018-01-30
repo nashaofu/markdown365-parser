@@ -25,8 +25,6 @@ export default class InlineLexer {
     gfm = true,
     breaks = false,
     pedantic = false,
-    sanitize = false,
-    sanitizer = null,
     smartypants = false,
     base = ''
   } = {}, links = {}) {
@@ -34,8 +32,6 @@ export default class InlineLexer {
       gfm,
       breaks,
       pedantic,
-      sanitize,
-      sanitizer,
       smartypants,
       base
     }
@@ -155,11 +151,7 @@ export default class InlineLexer {
         }
         src = src.substring(token[0].length)
         vnode = h({
-          text: this.options.sanitize
-            ? this.options.sanitizer
-              ? this.options.sanitizer(token[0])
-              : token[0]
-            : token[0],
+          text: token[0],
           type: 'html'
         })
         vnodes.push(vnode)

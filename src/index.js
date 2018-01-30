@@ -19,11 +19,8 @@ export default class Parser {
   constructor ({
     gfm = true,
     tables = true,
-    breaks = false,
     pedantic = false,
-    sanitize = false,
-    sanitizer = null,
-    smartLists = false,
+    breaks = false,
     smartypants = false,
     base = '',
     $el = null
@@ -31,11 +28,8 @@ export default class Parser {
     this.options = {
       gfm,
       tables,
-      breaks,
       pedantic,
-      sanitize,
-      sanitizer,
-      smartLists,
+      breaks,
       smartypants,
       base,
       $el
@@ -95,9 +89,7 @@ export default class Parser {
     } catch (error) {
       vnode.$el.innerHTML = ''
       this.renderer.patch(vnode, {})
-      if (process.env.NODE_ENV === 'development') {
-        console.error(error)
-      }
+      console.warn(`[markdown365-parser]:${error}`)
     }
   }
 }

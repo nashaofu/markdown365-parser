@@ -10,7 +10,56 @@ react的发布让前端摆脱了使用jQuery一点一点修改DOM的历史。对
 
 ![talk is cheap show me the code](http://upload-images.jianshu.io/upload_images/6492782-f6e1801eecc16df7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-# 嗯，好了，下面开始正式安利
+## 嗯，好了，下面开始正式安利
+
+### 支持语法
+项目已经支持了比较常用的一些语法，具体请查看[Grammar.md](https://github.com/markdown365/markdown365-parser/blob/master/Grammar.md)
+
+### 使用示例如下
+```html
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>markdown365-parser</title>
+  <script src="dist/markdown365-parser.js"></script>
+</head>
+<body>
+  <div id="previiew"></div>
+  <script>
+    const markdwon = '## markdown365-parser'
+    const parser = new Markdown365Parser({
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      smartypants: false,
+      base: '',
+      $el: this.$refs.view
+      base = '',
+      $el: document.querySelector('#previiew')
+    })
+    parser.parse(markdown)
+  </script>
+</body>
+</html>
+```
+
+### 参数说明
+
+* **gfm**: GitHub flavored markdown语法支持. 默认: `true`
+
+* **tables**: GFM tables语法支持. 必须要求`gfm`为`true`. 默认: `true`
+
+* **breaks**: GFM line breaks解析规则支持. 必须要求`gfm`为`true`. 默认: `false`
+
+* **pedantic**: 是否尽可能遵守`markdown.pl`的部分内容. 不去掉一些不严格的内容. 默认: `false`
+
+* **smartypants**: 是否替换特殊符号. 默认: `false`
+
+* **base**：这里是用来指定markdwon文档中的链接地址、图片地址的前置链接，如markdown中的说有图片都指向另一个域的时候，base就可以设置为指定域名。这里这个参数主要时考虑到编写桌面markdown编辑器用的，因为编辑器打开markdown文件时，对应的图片的路径要转换为相对markdown文件所在目录的相对路径，具体可参考我的另一个项目[markdown365](https://github.com/markdown365/markdown365)
+
+* **$el**：文档要渲染到的dom节点
 
 ## 源码目录结构
 
@@ -60,18 +109,7 @@ src
      * @param {Object} options
      */
     constructor (options) {
-      this.options = {
-        gfm,
-        tables,
-        breaks,
-        pedantic,
-        sanitize,
-        sanitizer,
-        smartLists,
-        smartypants,
-        base,
-        $el
-      }
+      this.options = options
       // 初始化Lexer
       this.lexer = new Lexer(this.options)
       // 初始化Renderer
@@ -148,23 +186,17 @@ src
     constructor ({
       gfm = true,
       tables = true,
-      breaks = false,
       pedantic = false,
-      sanitize = false,
-      sanitizer = null,
-      smartLists = false,
+      breaks = false,
       smartypants = false,
       base = ''
     } = {}) {
       this.options = {
         gfm,
-        breaks,
         tables,
+        breaks,
         pedantic,
-        sanitize,
-        sanitizer,
         smartypants,
-        smartLists,
         base
       }
       // 初始化块级语法解析
@@ -255,82 +287,82 @@ src
   #### 行内解析说明，如下代码只进行说明，实际情况子节点还有parent属性，该属性指向父节点
 
   * 进行行内解析前
-    ```js
-    const vnode = {
-      uid: 0,
-      $el: null,
-      tag: 'li',
-      type: 'node',
-      parent: null,
-      attributes: {},
-      text: '',
-      source: null,
-      children: [
-        {
-          uid: 1,
-          $el: null,
-          tag: null,
-          type: 'text',
-          children: [],
-          attributes: {},
-          text: '',
-          source: '[x] [google](https://www.google.com/)'
-        }
-      ]
-    }
-    ```
+  ```js
+  const vnode = {
+    uid: 0,
+    $el: null,
+    tag: 'li',
+    type: 'node',
+    parent: null,
+    attributes: {},
+    text: '',
+    source: null,
+    children: [
+      {
+        uid: 1,
+        $el: null,
+        tag: null,
+        type: 'text',
+        children: [],
+        attributes: {},
+        text: '',
+        source: '[x] [google](https://www.google.com/)'
+      }
+    ]
+  }
+  ```
   * 行内解析后应为
-    ```js
-    const vnode = {
-      uid: 0,
-      $el: null,
-      tag: 'li',
-      type: 'node',
-      parent: null,
-      attributes: {},
-      text: '',
-      source: null,
-      children: [
-        {
-          uid: 1,
-          $el: null,
-          tag: 'input',
-          type: 'node',
-          attributes: {
-            checked: 'checked',
-            disabled: 'disabled',
-            type: 'checkbox'
-          },
-          text: '',
-          source: null,
-          children: []
+  ```js
+  const vnode = {
+    uid: 0,
+    $el: null,
+    tag: 'li',
+    type: 'node',
+    parent: null,
+    attributes: {},
+    text: '',
+    source: null,
+    children: [
+      {
+        uid: 1,
+        $el: null,
+        tag: 'input',
+        type: 'node',
+        attributes: {
+          checked: 'checked',
+          disabled: 'disabled',
+          type: 'checkbox'
         },
-        {
-          uid: 2,
-          $el: null,
-          tag: 'a',
-          type: 'node',
-          attributes: {
-            href: 'https://www.google.com/'
-          },
-          text: '',
-          source: null,
-          children: [
-            {
-              uid: 3,
-              $el: null,
-              tag: null,
-              type: 'text',
-              attributes: {},
-              text: 'google',
-              source: null,
-              children: []
-            }
-          ]
-        }
-      ]
-    }
-    ```
+        text: '',
+        source: null,
+        children: []
+      },
+      {
+        uid: 2,
+        $el: null,
+        tag: 'a',
+        type: 'node',
+        attributes: {
+          href: 'https://www.google.com/'
+        },
+        text: '',
+        source: null,
+        children: [
+          {
+            uid: 3,
+            $el: null,
+            tag: null,
+            type: 'text',
+            attributes: {},
+            text: 'google',
+            source: null,
+            children: []
+          }
+        ]
+      }
+    ]
+  }
+  ```
 3. **BlockLexer**类：BlockLexer类最主要的方法是lex，该方法是正真语法解析部分，在方法内部使用while循环，直到src被解析完才返回vnode，并且里面的每一个解析规则的顺序是不能随意更换的，因为规则之间会存在相互包含的关系，例如一个h1语法段落肯定是可以被解析为p标签的，所以这就要求h1的解析规则放在p标签规则解析的前面，如果不能匹配才会匹配为p标签。其次，对与lex的另两个参数的作用，**top**参数主要是为了区分一段文字是解析为p标签还是解析为text类型的节点，如果没有父节点就解析为p标签，反之则为text节点。**bq**参数用来区分是否为blockquote标签下的内容，在blockquote便签下的内容不会被解析到参考式的链接中去，其实也就是参考式的链接只能写在顶级，否则不会生效
   ```js
   import block from './block-rules'
@@ -358,18 +390,12 @@ src
       gfm = true,
       tables = true,
       pedantic = false,
-      sanitize = false,
-      sanitizer = null,
-      smartLists = false,
       base = ''
     } = {}) {
       this.options = {
         gfm,
         tables,
         pedantic,
-        sanitize,
-        sanitizer,
-        smartLists,
         base
       }
 
@@ -486,19 +512,15 @@ src
      */
     constructor ({
       gfm = true,
-      breaks = false,
       pedantic = false,
-      sanitize = false,
-      sanitizer = null,
+      breaks = false,
       smartypants = false,
       base = ''
     } = {}, links = {}) {
       this.options = {
         gfm,
-        breaks,
         pedantic,
-        sanitize,
-        sanitizer,
+        breaks,
         smartypants,
         base
       }
@@ -565,11 +587,7 @@ src
      * @param {Object} link 链接对象
      * @returns {Vnode}
      */
-    lexLink (cap, link) {
-      /**
-       *
-       */
-    }
+    lexLink (cap, link) {}
 
     /**
      * Smartypants Transformations
@@ -585,65 +603,65 @@ src
   ```
 5. **Vnode**类：
   * vnode类
-    ```js
-    export default class VNode {
-      static uid = 0 // 每次创建一个vnode就会加一，这是每个vnode的唯一标识
-      constructor ({
-        $el = null,
-        tag = null,
-        type = 'node', // 可为node/text/html
-        parent = null,
-        children = [],
-        attributes = {},
-        text = null,
-        source = null
-      } = {}) {
-        this.uid = VNode.uid++
-        this.$el = $el
-        this.tag = tag
-        this.type = type
-        this.parent = parent
-        this.children = children
-        this.attributes = attributes
-        this.text = text
-        this.source = source
-      }
-    }
-    ```
-  * h函数：快速创建vnode的方法
-    ```js
-    import VNode from './vnode'
-
-    export default ({
+  ```js
+  export default class VNode {
+    static uid = 0 // 每次创建一个vnode就会加一，这是每个vnode的唯一标识
+    constructor ({
       $el = null,
       tag = null,
-      type = 'node',
+      type = 'node', // 可为node/text/html
       parent = null,
       children = [],
       attributes = {},
-      text = '',
+      text = null,
       source = null
-    } = {}) => {
-      const vnode = new VNode({
-        $el,
-        tag,
-        type,
-        parent,
-        children,
-        attributes,
-        text,
-        source
-      })
-      // 每个子节点都把parent指向当前节点vnode
-      vnode.children.forEach(item => {
-        item.parent = vnode
-      })
-      return vnode
+    } = {}) {
+      this.uid = VNode.uid++
+      this.$el = $el
+      this.tag = tag
+      this.type = type
+      this.parent = parent
+      this.children = children
+      this.attributes = attributes
+      this.text = text
+      this.source = source
     }
-    ```
+  }
+  ```
+  * h函数：快速创建vnode的方法
+  ```js
+  import VNode from './vnode'
+
+  export default ({
+    $el = null,
+    tag = null,
+    type = 'node',
+    parent = null,
+    children = [],
+    attributes = {},
+    text = '',
+    source = null
+  } = {}) => {
+    const vnode = new VNode({
+      $el,
+      tag,
+      type,
+      parent,
+      children,
+      attributes,
+      text,
+      source
+    })
+    // 每个子节点都把parent指向当前节点vnode
+    vnode.children.forEach(item => {
+      item.parent = vnode
+    })
+    return vnode
+  }
+  ```
 6. **Renderer**类：Renderer类参考了[vue中的render](https://github.com/vuejs/vue/blob/dev/src/core/vdom/patch.js#L684)实现方法，其中主要是在对比的时候就对真实dom进行修改，当patch结束dom更新也就结束了
   ```js
-    export default class Renderer {
+  export default class Renderer {
     static vision = process.env.VERSION
 
     /**
@@ -749,11 +767,6 @@ src
         newEndVnode = newCh[--newEndIdx]
       } else if (oldStartVnode.tag === newEndVnode.tag) { // Vnode moved right
         this.patch(newEndVnode, oldStartVnode)
-        /**
-         * 把旧节点真实dom移动到newEndVnode的位置
-         * 假定oldStartIdx和newStaetIdx，oldEndIdx和newEndIdx都相同的情况下进行分析
-         * 按照如下方法就可以得到最新的按照newCh排列的真实dom结构
-         */
         this.insert(oldEndVnode.parent, oldStartVnode, oldCh[oldEndIdx + 1])
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]
@@ -786,9 +799,21 @@ src
   ```
   下面分别对while循环中的每一个条件进行说明
   1. 如果`oldStartVnode.tag === newStartVnode.tag`，那么旧认为这两个节点是匹配的，即认为为相同节点，直接对比更新这两个节点，如：在末尾追加节点这种情况或者节点子元素变化
-  ![1.png](http://upload-images.jianshu.io/upload_images/6492782-bdf39d7a02dcbfff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  ![1.png](http://upload-images.jianshu.io/upload_images/6492782-6efcd494b5239a63.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
   2. 如果`oldEndVnode.tag === newEndVnode.tag`，那么就用新的节点去更新旧节点，如：第一个节点变为了其他类型的节点
-  ![2.png](http://upload-images.jianshu.io/upload_images/6492782-1c346f9972502813.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-  3. 如果`oldStartVnode.tag === newEndVnode.tag`，那么就对比这两个节点，并且将真实dom节点移动到newEndVnode.tag所在的位置，下图中步骤1只是把新节点更新到真实dom上去了，但是节点所在位置和新节点集合是不同的，所以还需要第二个步骤，移动h1到h3后面去，此时real dom和virtual dom才对应得上
+  ![2.png](http://upload-images.jianshu.io/upload_images/6492782-05b5ecb67f52a180.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  3. 如果`oldStartVnode.tag === newEndVnode.tag`，那么就对比这两个节点，并且将真实dom节点移动到newEndVnode.tag所在的位置
   ![3.png](http://upload-images.jianshu.io/upload_images/6492782-09c542ddda374b7f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  4. `oldEndVnode.tag === newStartVnode.tag`的情况基本和3一样，只是移动节点的位置要反过来，这里就不放图了
+  5. 如果以上几种情况都不能满足的话，就让节点`newStartVnode`取代`oldStartVnode`
+  循环结束之后的条件判断
+  1. 如果`oldStartIdx > oldEndIdx`，比如在末尾追加节点的情况，这是就需要插入新节点
+  ![4.png](http://upload-images.jianshu.io/upload_images/6492782-fb310e1621cf6dbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  2. 如果`newStartIdx > newEndIdx`，这种情况可以用移除节点来做类比，所以就需要移除旧的多余的节点
+  ![5.png](http://upload-images.jianshu.io/upload_images/6492782-e6052e2eca277f9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+对于整个render的diff来说，整体的效率还是很低，还不完善，特别是对于子节点列表对比的方法，还有很大的优化空间
+
+## 最后
+
+项目目前很多功能还不是很完善，对于markdwon的解析也只是做了比较基础的支持，还有一部分语法没有能够支持，特别是对于html的支持还存在BUG，并且目前对于语法如何扩展也还存在问题，当前的代码结构不易于扩展语法。对于diff部分也还有很多需要改进的地方。所以乳沟有兴趣，欢迎提交pr

@@ -24,11 +24,8 @@ export default {
     this.parser = new Markdown365Parser({
       gfm: true,
       tables: true,
-      breaks: false,
+      breaks: true,
       pedantic: false,
-      sanitize: false,
-      sanitizer: null,
-      smartLists: false,
       smartypants: false,
       base: '',
       $el: this.$refs.view

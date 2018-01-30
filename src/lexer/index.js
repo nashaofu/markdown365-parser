@@ -18,23 +18,17 @@ export default class Lexer {
   constructor ({
     gfm = true,
     tables = true,
-    breaks = false,
     pedantic = false,
-    sanitize = false,
-    sanitizer = null,
-    smartLists = false,
+    breaks = false,
     smartypants = false,
     base = ''
   } = {}) {
     this.options = {
       gfm,
-      breaks,
       tables,
       pedantic,
-      sanitize,
-      sanitizer,
+      breaks,
       smartypants,
-      smartLists,
       base
     }
     // 初始化块级语法解析

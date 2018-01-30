@@ -23,20 +23,12 @@ export default class BlockLexer {
   constructor ({
     gfm = true,
     tables = true,
-    pedantic = false,
-    sanitize = false,
-    sanitizer = null,
-    smartLists = false,
-    base = ''
+    pedantic = false
   } = {}) {
     this.options = {
       gfm,
       tables,
-      pedantic,
-      sanitize,
-      sanitizer,
-      smartLists,
-      base
+      pedantic
     }
 
     // 初始化解析规则
@@ -253,7 +245,7 @@ export default class BlockLexer {
 
           // Determine whether the next list item belongs here.
           // Backpedal if it does not belong in this list.
-          if (this.options.smartLists && i !== l - 1) {
+          if (i !== l - 1) {
             let b = block.bullet.exec(token[i + 1])[0]
             if (bull !== b && !(bull.length > 1 && b.length > 1)) {
               src = token.slice(i + 1).join('\n') + src
@@ -280,28 +272,10 @@ export default class BlockLexer {
       if (token = this.rules.html.exec(src)) {
         src = src.substring(token[0].length)
 
-        const html = {
-          type: this.options.sanitize ? 'node' : 'html'
-        }
-        html.tag = html.type === 'node' ? 'p' : null
-
-        if (html.tag) {
-          if (!this.options.sanitizer &&
-            (token[1] === 'pre' || token[1] === 'script' || token[1] === 'style')) {
-            html.children = [
-              h({
-                type: 'text',
-                text: token[0]
-              })
-            ]
-          } else {
-            html.lex = false
-          }
-        } else {
-          html.text = token[0]
-        }
-
-        vnode = h(html)
+        vnode = h({
+          type: 'html',
+          text: token[0]
+        })
         vnodes.push(vnode)
         continue
       }
