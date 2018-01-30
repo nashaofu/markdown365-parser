@@ -29,8 +29,6 @@ A markdown parser library base vnode
       pedantic: false,
       smartypants: false,
       base: '',
-      $el: this.$refs.view
-      base = '',
       $el: document.querySelector('#previiew')
     })
     parser.parse(markdown)

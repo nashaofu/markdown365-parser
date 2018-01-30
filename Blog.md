@@ -34,8 +34,6 @@ react的发布让前端摆脱了使用jQuery一点一点修改DOM的历史。对
       breaks: true,
       pedantic: false,
       smartypants: false,
-      base: '',
-      $el: this.$refs.view
       base = '',
       $el: document.querySelector('#previiew')
     })
