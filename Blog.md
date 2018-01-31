@@ -1,4 +1,4 @@
-首先先放上项目地址，喜欢的话就star一个吧
+首先放上项目地址，喜欢的话就star一个吧
 
 **GitHub**: [markdown365-parser](https://github.com/markdown365/markdown365-parser)
 
@@ -6,7 +6,7 @@
 
 react的发布让前端摆脱了使用jQuery一点一点修改DOM的历史。对于后来的很多框架都产生非常重要的影响。其中最为重要的概念就是Virtual DOM了，在后面vue也借鉴了这一概念，不过这两个框架对Virtual DOM的实现是不一样的。
 
-作为一个搬砖的，肯定是离不开markdwon的，markdwon能够用很简洁的语法表现出很好的排版样式。所以也就关注了一些markdwon的解析器。在GitHub上找了几个比较流行的markdwon解析的库之后选择了[marked](https://github.com/chjj/marked)来研究，选择marked的原因主要是从代码量和支持语法两个方面考虑的，由于自己单枪匹马的干，所以选用的库不能太大了（我怕搞不定），marked的源码只有1000多行，而且代码结构还是比较清晰的，整个扒下来也就定义了三个类，分别是Lexer（块级语法解析）、InlineLexer（行内语法解析）和Renderer（渲染成html字符串），这里就不过多说明marked了，其中我借鉴了Lexer和InlineLexer两个类的实现。
+作为一个搬砖的，肯定是离不开markdwon的，markdwon能够用很简洁的语法表现出很好的排版样式。所以也就关注了一些markdwon的解析器，闲来无事，就有了自己造一个轮子的想法。在GitHub上找了几个比较流行的markdwon解析的库之后选择了[marked](https://github.com/chjj/marked)来研究，选择marked的原因主要是从代码量和支持语法两个方面考虑的，由于自己单枪匹马的干，所以选用的库不能太大了（我怕搞不定），marked的源码只有1000多行，而且代码结构还是比较清晰的，整个扒下来也就定义了三个类，分别是Lexer（块级语法解析）、InlineLexer（行内语法解析）和Renderer（渲染成html字符串），这里就不过多说明marked了，其中我借鉴了Lexer和InlineLexer两个类的实现。
 
 ![talk is cheap show me the code](http://upload-images.jianshu.io/upload_images/6492782-f6e1801eecc16df7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -163,7 +163,7 @@ src
     }
   }
   ```
-2. **Lexer**类：Lexer包含BlockLexer和InlineLexer两个部分，分别用来解析块级语法和行内语法，其中比较重点的是lexInline方法，该方法中会遍历解析块级语法解析后的vnode对象，如果vnode对象的source存在就要解析，并且由于块级节点解析后的会存在text类型的为解析的节点，即text类型的节点中还可以解析出一些语法。例如：一段文字中还包含链接或者斜体等，这些都是属于行内解析的范畴，但我们知道text类型的节点是不存在子接点的，所以解析出来的vnode对象不能挂载到原text节点的子节点上，所以就得把解析出来的节点挂载到原text节点的父节点上，并且对应的位置也不能错乱，详细见下面源码说明
+2. **Lexer**类：Lexer包含BlockLexer和InlineLexer两个部分，分别用来解析块级语法和行内语法，其中比较重点的是lexInline方法，该方法中会遍历解析块级语法解析后的vnode对象，如果vnode对象的source存在就要解析，并且由于块级节点解析后的会存在text类型的未解析的节点，即text类型的节点中还可以解析出一些语法。例如：一段文字中还包含链接或者斜体等，这些都是属于行内解析的范畴，但我们知道text类型的节点是不存在子接点的，所以解析出来的vnode对象不能挂载到原text节点的子节点上，所以就得把解析出来的节点挂载到原text节点的父节点上，并且对应的位置也不能错乱，详细见下面源码说明
   ```js
   import BlockLexer from './block-lexer'
   import InlineLexer from './inline-lexer'
@@ -732,8 +732,7 @@ src
   ```
   #### diff原理说明
 
-  diff原理基本和vue的思路一致，只是在vue diff的基础上做了简化和修改。这里可以打开[源码](https://github.com/markdown365/markdown365-parser/blob/master/src/renderer/index.js#L48)对比着看，同时这里也推荐一篇对于vue diff源码解析的文章[Vue原理解析之Virtual Dom](https://segmentfault.com/a/1190000008291645)，同时也可以看我的另一篇文章[vue中Virtual DOM源码学习](https://www.jianshu.com/p/9e9477847ba1)
-
+  diff原理基本和vue的思路一致，只是在vue diff的基础上做了简化和修改。这里可以打开[源码](https://github.com/markdown365/markdown365-parser/blob/master/src/renderer/index.js#L48)对比着看，同时这里也推荐一篇对于vue diff源码解析的文章[Vue原理解析之Virtual Dom](https://segmentfault.com/a/1190000008291645)
   1. 单个节点进行比较
   ![diff原理](http://upload-images.jianshu.io/upload_images/6492782-68c4f8249fa93e16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
   2. 子节点列表diff，子节点相对于单个节点的对比就复杂很多了，会存在列表中添加节点、删除节点、节点位置移动、某一个节点被替换这几种基本情况。这里先放上`patchChildren`方法的源码。
@@ -814,4 +813,6 @@ src
 
 ## 最后
 
-项目目前很多功能还不是很完善，对于markdwon的解析也只是做了比较基础的支持，还有一部分语法没有能够支持，特别是对于html的支持还存在BUG，并且目前对于语法如何扩展也还存在问题，当前的代码结构不易于扩展语法。对于diff部分也还有很多需要改进的地方。所以乳沟有兴趣，欢迎提交pr
+项目目前很多功能还不是很完善，对于markdwon的解析也只是做了比较基础的支持，还有一部分语法没有能够支持，特别是对于html的支持还存在BUG，并且目前对于语法如何扩展也还存在问题，当前的代码结构不易于扩展语法。对于diff部分也还有很多需要改进的地方。所以乳沟有兴趣，欢迎提交pr。
+
+能力有限，所以以上内容有很多不详细的地方，也可能存在错误，还请热心的同学帮忙指正。
