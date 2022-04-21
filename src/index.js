@@ -3,7 +3,7 @@ import Renderer from './renderer'
 import h from './vnode'
 
 export default class Parser {
-  static vision = process.env.VERSION
+  static version = process.env.VERSION
   /**
    * Static Parser Method
    */

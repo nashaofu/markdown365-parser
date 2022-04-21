@@ -493,7 +493,7 @@ src
    * Inline Lexer & Compiler
    */
   export default class InlineLexer {
-    static vision = process.env.VERSION
+    static version = process.env.VERSION
     static rules = inline
     /**
      * Static Lexing/Compiling Method
@@ -660,7 +660,7 @@ src
 6. **Renderer**类：Renderer类参考了[vue中的render](https://github.com/vuejs/vue/blob/dev/src/core/vdom/patch.js#L684)实现方法，其中主要是在对比的时候就对真实dom进行修改，当patch结束dom更新也就结束了
   ```js
   export default class Renderer {
-    static vision = process.env.VERSION
+    static version = process.env.VERSION
 
     /**
      * Static render Method

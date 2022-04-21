@@ -4,7 +4,7 @@ import {
 } from '../utils.js'
 
 export default class Renderer {
-  static vision = process.env.VERSION
+  static version = process.env.VERSION
 
   /**
    * Static render Method
