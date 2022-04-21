@@ -1,5 +1,5 @@
 export default class VNode {
-  static vision = process.env.VERSION
+  static version = process.env.VERSION
   static uid = 0
   constructor ({
     $el = null,
