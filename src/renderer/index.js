@@ -131,15 +131,18 @@ export default class Renderer {
       }
     }
     // 以下情况为节点增加或者减少了的情况
-    if (oldStartIdx > oldEndIdx) {
-      // 插入新节点的情况
+    if (newStartIdx <= newEndIdx) {
+      // 节点增加了
+      const pivot = newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1]
       for (; newStartIdx <= newEndIdx; ++newStartIdx) {
-        this.insert(newCh[newStartIdx].parent, this.create(newCh[newStartIdx]), newCh[newEndIdx + 1])
+        this.insert(oldCh[0].parent, this.create(newCh[newStartIdx]), pivot)
       }
-    } else if (newStartIdx > newEndIdx) {
-      // 移除就无用的旧节点
+    } else if (oldStartIdx <= oldEndIdx) {
+      // 移除多余节点
       for (; oldStartIdx <= oldEndIdx; ++oldStartIdx) {
-        this.removeEl(oldCh[oldStartIdx])
+        if (oldCh[oldStartIdx]) {
+          this.removeEl(oldCh[oldStartIdx])
+        }
       }
     }
   }
